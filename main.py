@@ -1,10 +1,20 @@
 import uvicorn
 import pydantic
 from fastapi import FastAPI, exceptions
+from starlette.middleware.cors import CORSMiddleware
 import mongoengine
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 mongoengine.connect('store')
 
 

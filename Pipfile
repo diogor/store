@@ -12,6 +12,3 @@ fastapi = "*"
 tinydb = "*"
 environs = "*"
 mongoengine = "*"
-
-[requires]
-python_version = "3.8"
