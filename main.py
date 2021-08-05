@@ -1,5 +1,5 @@
-import uvicorn
 import pydantic
+from datetime import datetime
 from fastapi import FastAPI, exceptions
 from starlette.middleware.cors import CORSMiddleware
 import mongoengine
@@ -20,6 +20,7 @@ mongoengine.connect('store')
 
 class RecordDocument(mongoengine.Document):
     data = mongoengine.DictField()
+    created_at = mongoengine.DateTimeField()
 
 
 class Record(pydantic.BaseModel):
@@ -27,7 +28,7 @@ class Record(pydantic.BaseModel):
 
 
 def insert_record(data) -> str:
-    record = RecordDocument(data=data).save()
+    record = RecordDocument(data=data, created_at=datetime.now()).save()
     return str(record.id)
 
 
