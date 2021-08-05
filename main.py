@@ -34,8 +34,11 @@ def insert_record(data) -> str:
 
 def clean_db():
     time_period = datetime.now() - timedelta(hours=24)
-    records = RecordDocument.objects.get(created_at__lt=time_period)
-    records.delete()
+    try:
+        records = RecordDocument.objects.get(created_at__lt=time_period)
+        records.delete()
+    except mongoengine.DoesNotExist:
+        pass
 
 
 @app.post("/")
