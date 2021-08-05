@@ -1,5 +1,5 @@
 import pydantic
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import FastAPI, exceptions
 from starlette.middleware.cors import CORSMiddleware
 import mongoengine
@@ -32,9 +32,16 @@ def insert_record(data) -> str:
     return str(record.id)
 
 
+def clean_db():
+    time_period = datetime.now() - timedelta(hours=24)
+    records = RecordDocument.objects.get(created_at__lt=time_period)
+    records.delete()
+
+
 @app.post("/")
 async def index(record: Record):
     id = insert_record(record.data)
+    clean_db()
     return {"id": id}
 
 
